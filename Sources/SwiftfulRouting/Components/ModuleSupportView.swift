@@ -39,7 +39,7 @@ struct ModuleSupportView<Content:View>: View {
                             RouterViewInternal(
                                 routerId: RouterViewModel.rootId,
                                 rootRouterInfo: rootRouterInfo,
-                                addNavigationStack: addNavigationStack,
+                                addNavigationStack: false,
                                 content: { router in
                                     AnyView(data.destination(router))
                                 }
