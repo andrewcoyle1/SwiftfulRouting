@@ -14,25 +14,31 @@ extension AnyRouter {
     ///   - transitionID: Optional transition ID. If provided, a zoom transition will be used from a button with matching ID.
     ///   - namespace: The namespace to use for the transition
     ///   - content: The view builder for the destination content
-    @MainActor public func showScreenWithZoomTransition<Content: View>(
+    @MainActor public func showScreenWithZoomTransition<T>(
         _ style: SegueOption,
+        id: String = UUID().uuidString,
+        location: SegueLocation = .insert,
+        animates: Bool = true,
+        transitionBehavior: TransitionMemoryBehavior = .keepPrevious,
+        onDismiss: (() -> Void)? = nil,
         transitionID: String? = nil,
         namespace: Namespace.ID,
-        @ViewBuilder content: @escaping (AnyRouter) -> Content
-    ) {
+        destination: @escaping (AnyRouter) -> T,
+    ) where T : View {
         guard let transitionID = transitionID else {
-            // No transition, use normal presentation
-            showScreen(style) { router in
-                content(router)
-            }
+
+            let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, destination: destination)
+            object.showScreens(destinations: [destination])
+
             return
         }
 
-        showScreen(style) { router in
-            ZoomTransitionDestinationView(transitionID: transitionID, namespace: namespace) {
-                content(router)
-            }
+        let view: View = ZoomTransitionDestinationView(transitionID: transitionID, namespace: namespace) {
+            destination(router)
         }
+
+        let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, destination: view)
+        object.showScreens(destinations: [destination])
     }
 }
 
