@@ -17,7 +17,7 @@ struct ModuleSupportView<Content:View>: View {
     
     @ViewBuilder var content: (AnyRouter) -> Content
 
-    @State private var viewFrame: CGRect = UIScreen.main.bounds
+    @State private var viewFrame: CGRect = platformScreenBounds
 
     var body: some View {
         ZStack {

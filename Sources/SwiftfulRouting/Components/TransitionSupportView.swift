@@ -17,7 +17,7 @@ struct TransitionSupportView<Content:View>: View {
     let currentTransition: TransitionOption
     let onDidSwipeBack: () -> Void
 
-    @State private var viewFrame: CGRect = UIScreen.main.bounds
+    @State private var viewFrame: CGRect = platformScreenBounds
 
     var body: some View {
         ZStack {
@@ -63,7 +63,7 @@ struct TransitionSupportView<Content:View>: View {
 //                .readingFrame(onChange: { frame in
 //                    // Add +150 to account for safe areas
 //                    self.viewFrame = frame
-////                    self.viewFrame = UIScreen.main.bounds
+////                    self.viewFrame = platformScreenBounds
 ////                    self.viewFrame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
 //                })
 //        })

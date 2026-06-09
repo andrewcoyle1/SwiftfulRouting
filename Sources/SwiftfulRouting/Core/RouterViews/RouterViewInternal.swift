@@ -406,15 +406,7 @@ extension View {
         self
             .background(
                 Text("")
-                    .fullScreenCover(item: Binding(stack: viewModel.activeScreenStacks, routerId: routerId, segue: .fullScreenCover, isResizeableSheet: false, onDidDismiss: {
-                        // This triggers if the user swipes down to dismiss the screen
-                        // Now we must update activeScreenStacks to match that behavior
-                        viewModel.dismissScreens(toEnvironmentId: routerId, animates: true)
-                    }), onDismiss: nil) { destination in
-                        destination.destination
-                            .applyResizableSheetModifiersIfNeeded(segue: destination.segue)
-                            .environmentObject(viewModel)
-                    }
+                    .modifier(FullScreenCoverPresenter(viewModel: viewModel, routerId: routerId))
             )
     }
 }
