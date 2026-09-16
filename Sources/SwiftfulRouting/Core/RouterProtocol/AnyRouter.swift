@@ -91,6 +91,8 @@ public struct AnyRouter: Sendable, Router {
     ///   - id: Identifier for the screen
     ///   - location: Where to insert the new screen in the heirarchy (default = .insert)
     ///   - onDismiss: Trigger closure when screen gets dismissed (note: dismiss != disappear)
+    ///   - onDidDismiss: Trigger closure once the dismissal has completed and the router has
+    ///   finished updating its stacks. Use this, not `onDismiss`, to present another screen.
     ///   - animates: If the segue should animate or not (default = true)
     ///   - transitionBehavior: Determines the behavior of "transition" methods on the destination screen.
     ///   - destination: The destination screen.
@@ -101,9 +103,10 @@ public struct AnyRouter: Sendable, Router {
         animates: Bool = true,
         transitionBehavior: TransitionMemoryBehavior = .keepPrevious,
         onDismiss: (() -> Void)? = nil,
+        onDidDismiss: (() -> Void)? = nil,
         destination: @escaping (AnyRouter) -> T
     ) where T : View {
-        let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, destination: destination)
+        let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, onDidDismiss: onDidDismiss, destination: destination)
         object.showScreens(destinations: [destination])
     }
 
@@ -120,12 +123,13 @@ public struct AnyRouter: Sendable, Router {
         animates: Bool = true,
         transitionBehavior: TransitionMemoryBehavior = .keepPrevious,
         onDismiss: (() -> Void)? = nil,
+        onDidDismiss: (() -> Void)? = nil,
         transitionID: String? = nil,
         namespace: Namespace.ID,
         destination: @escaping (AnyRouter) -> T
     ) where T : View {
         guard let transitionID = transitionID else {
-            let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, destination: destination)
+            let destination = AnyDestination(id: id, segue: segue, location: location, animates: animates, transitionBehavior: transitionBehavior, onDismiss: onDismiss, onDidDismiss: onDidDismiss, destination: destination)
             object.showScreens(destinations: [destination])
 
             return
@@ -144,6 +148,7 @@ public struct AnyRouter: Sendable, Router {
             animates: animates,
             transitionBehavior: transitionBehavior,
             onDismiss: onDismiss,
+            onDidDismiss: onDidDismiss,
             destination: wrappedDestination
         )
         object.showScreens(destinations: [destination])
