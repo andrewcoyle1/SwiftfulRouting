@@ -11,6 +11,7 @@
 - ✅ Transitions
 - ✅ Modules
 - ✅ Zoom transitions (iOS 18+)
+- ✅ Readable content width on iPad and Mac (iOS 17+)
 
 ### How to use this package:
 
