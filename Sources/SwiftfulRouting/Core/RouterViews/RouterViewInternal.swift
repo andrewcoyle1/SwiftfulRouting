@@ -37,6 +37,7 @@ struct RouterViewInternal<Content: View>: View, Router {
             }
         )
         .id(routerId)
+        .modifier(ReadableContentMargins())
         
         // Add NavigationStack if needed
         .ifSatisfiesCondition(addNavigationStack, transform: { content in
