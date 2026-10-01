@@ -387,6 +387,38 @@ Supported styles: `.sheet`, `.fullScreenCover`, and their config variants (e.g. 
 </details>
 
 
+## Readable Content Width (iPad & Mac)
+
+<details>
+<summary> Details (Click to expand) </summary>
+<br>
+
+On a wide iPad or Mac window, lists and cards stretch edge to edge. Set `readableContentWidth` once and every routed screen wider than it centres its content in a column of that width. Each screen measures itself, so a sheet is never squeezed by the wider screen behind it. It is off (`nil`) by default.
+
+```swift
+WindowGroup {
+    RouterView { _ in
+        ContentView()
+    }
+}
+.environment(\.readableContentWidth, 700)
+```
+
+The column is made by padding the screen's horizontal safe area, so:
+- `List`, `Form` and `ScrollView` content (including lists that zero their section margins) and `safeAreaInset` bars sit in the column.
+- Backgrounds and anything using `.ignoresSafeArea()` still reach the window edges.
+
+A screen that lays out in columns, such as a dashboard, can ask for more room. This applies to that screen only, not to the screens it pushes or presents.
+
+```swift
+DashboardView()
+    .preferredReadableContentWidth(1100)
+```
+
+Requires iOS 17 or later; on earlier versions the modifiers do nothing.
+
+</details>
+
 ## Dismiss Screens
 
 <details>
