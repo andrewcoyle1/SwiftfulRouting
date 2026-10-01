@@ -18,13 +18,31 @@ public extension EnvironmentValues {
     }
 }
 
+struct PreferredReadableContentWidthKey: PreferenceKey {
+    static let defaultValue: CGFloat? = nil
+    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
+        value = value ?? nextValue()
+    }
+}
+
+public extension View {
+    /// A screen's own column width, in place of `readableContentWidth`: wider for a dashboard that
+    /// lays out in columns. No effect unless `readableContentWidth` is set.
+    func preferredReadableContentWidth(_ width: CGFloat) -> some View {
+        preference(key: PreferredReadableContentWidthKey.self, value: width)
+    }
+}
+
 struct ReadableContentMargins: ViewModifier {
 
-    @Environment(\.readableContentWidth) private var maxWidth
+    @Environment(\.readableContentWidth) private var defaultWidth
+    @State private var preferredWidth: CGFloat?
     @State private var width: CGFloat = 0
 
     private var margin: CGFloat {
-        guard let maxWidth, width > maxWidth else { return 0 }
+        guard let defaultWidth else { return 0 }
+        let maxWidth = preferredWidth ?? defaultWidth
+        guard width > maxWidth else { return 0 }
         return (width - maxWidth) / 2
     }
 
@@ -33,6 +51,7 @@ struct ReadableContentMargins: ViewModifier {
             content
                 .safeAreaPadding(.horizontal, margin)
                 .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width = $0 }
+                .onPreferenceChange(PreferredReadableContentWidthKey.self) { preferredWidth = $0 }
         } else {
             content
         }
