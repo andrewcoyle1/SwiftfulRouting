@@ -378,6 +378,8 @@ extension View {
                     }), onDismiss: nil) { destination in
                         destination.destination
                             .applyResizableSheetModifiersIfNeeded(segue: destination.segue)
+                            // Mac Catalyst does not carry environment objects into a presentation.
+                            .environmentObject(viewModel)
                     }
             )
     }
@@ -393,6 +395,8 @@ extension View {
                     }), onDismiss: nil) { destination in
                         destination.destination
                             .applyResizableSheetModifiersIfNeeded(segue: destination.segue)
+                            // Mac Catalyst does not carry environment objects into a presentation.
+                            .environmentObject(viewModel)
                     }
             )
     }
@@ -408,6 +412,8 @@ extension View {
                     }), onDismiss: nil) { destination in
                         destination.destination
                             .applyResizableSheetModifiersIfNeeded(segue: destination.segue)
+                            // Mac Catalyst does not carry environment objects into a presentation.
+                            .environmentObject(viewModel)
                     }
             )
     }
